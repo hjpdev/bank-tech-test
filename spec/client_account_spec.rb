@@ -6,6 +6,10 @@ describe ClientAccount do
     expect(subject.balance == 0).to be true
   end
 
+  it '#print_balance should return a formatted string' do
+    expect(subject.print_balance).to eq('£0')
+  end
+
   it 'Deposit should increase the balance' do
     subject.deposit(500)
     expect(subject.balance).to eq 500
