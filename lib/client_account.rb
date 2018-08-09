@@ -1,12 +1,24 @@
+require 'date'
 
 class ClientAccount
+  attr_reader :balance
 
-  def deposit
+  def initialize(balance=0)
+    @balance = balance
+    @record = []
   end
 
-  def withdraw
+  def deposit(amount, date=Date.today)
+    @record << [amount, date]
+    @balance += amount
+  end
+
+  def withdraw(amount, date=Date.today)
+    @record << [amount, date]
+    @balance -= amount
   end
 
   def statement
   end
 end
+
