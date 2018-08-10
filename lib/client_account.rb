@@ -18,7 +18,8 @@ class ClientAccount
   end
 
   def withdraw(amount, date=Date.today)
-    @record << [amount, date.strftime('%F')]
+    raise('Unable, balance is too low.') if amount > @balance
+    @record << [-amount, date.strftime('%F')]
     @balance -= amount
   end
 
