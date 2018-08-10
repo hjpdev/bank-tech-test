@@ -1,28 +1,35 @@
 require 'date'
+require 'terminal-table'
 
 class ClientAccount
-  attr_reader :balance, :record
+  attr_reader :name, :balance, :record, :info_hash
 
-  def initialize(balance=0)
+  def initialize(name='Name Unknown', balance=0)
+    @name = name
     @balance = balance
     @record = []
+    @info_hash = {name: name, balance: balance}
   end
 
   def print_balance
     "£#{@balance}"
   end
 
-  def deposit(amount, date=Date.today)
-    @record << [amount, date.strftime('%F')]
+  def deposit(date=Date.today, amount)
     @balance += amount
+    @record << [date.strftime('%F'), "£#{amount}", "£#{@balance}"]
+    info_hash[:balance] = @balance
   end
 
-  def withdraw(amount, date=Date.today)
+  def withdraw(date=Date.today, amount)
     raise('Unable, balance is too low.') if amount > @balance
-    @record << [-amount, date.strftime('%F')]
     @balance -= amount
+    @record << [date.strftime('%F'), "(£#{amount})", "£#{@balance}"]
+    info_hash[:balance] = @balance
   end
 
   def statement
+    table = Terminal::Table.new :headings => ['Date', 'Amount', 'Balance'], :rows => @record
+    puts table
   end
 end

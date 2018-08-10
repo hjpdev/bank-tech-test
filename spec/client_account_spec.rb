@@ -6,6 +6,11 @@ describe ClientAccount do
     expect(subject.balance == 0).to be true
   end
 
+  it 'Initializes with a clients name' do
+    ca = ClientAccount.new('H')
+    expect(ca.name).to eq('H')
+  end
+
   it '#print_balance should return a formatted string' do
     expect(subject.print_balance).to eq('£0')
   end
@@ -18,7 +23,12 @@ describe ClientAccount do
   it '#deposit should set the date to today by default' do
     subject.deposit(10)
     date = Date.today
-    expect(subject.record[0][1]).to eq date.strftime('%F')
+    expect(subject.record[0][0]).to eq date.strftime('%F')
+  end
+
+  it '#deposit should add the updated balance to transaction balance' do
+    subject.deposit(10)
+    expect(subject.record[0][2]).to eq '£10'
   end
 
   it '#withdraw should reduce the balance' do
@@ -31,7 +41,13 @@ describe ClientAccount do
     subject.deposit(100)
     subject.withdraw(10)
     date = Date.today
-    expect(subject.record[1][1]).to eq date.strftime('%F')
+    expect(subject.record[1][0]).to eq date.strftime('%F')
+  end
+
+  it '#withdraw should add the updated balance to the transaction record' do
+    subject.deposit(100)
+    subject.withdraw(30)
+    expect(subject.record[1][2]).to eq '£70'
   end
 
   it 'should not be able to withdraw if the balance is to low' do
